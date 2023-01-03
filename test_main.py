@@ -14,31 +14,28 @@ data = {
 def test_tasks_list():
     response = client.get("/tasks_list/")
     assert response.status_code == 200
-    assert data in response.json() == {
-        "task_id": 1,
-        "task_name": "task"
-    
-    }
+    assert data in response.json() == data
+
 
 def test_get_task():
-    response= client.get('/task/{id}',json=data)
-    assert response.status_code==200
-    assert data in response.json()
+    response = client.get('/task/{id}', json=data)
+    assert response.status_code == 200
+    assert data in response.json() == data
+
 
 def test_add_task():
-    response= client.post('/addtask',json=data)
-    assert response.status_code==200
-    assert data in response.json()
+    response = client.post('/addtask', json=data)
+    assert response.status_code == 200
+    assert data in response.json() == data
+
 
 def test_update_task():
-    response=client.put('/update/{id}',json=data)
-    assert response.status_code==200
-    assert data in response.json()
+    response = client.put('/update/{id}', json=data)
+    assert response.status_code == 200
+    assert data in response.json() == data
+
 
 def test_delete_task():
-    response=client.delete('/task/{id}',json=data)
-    assert response.status_code==200
-    assert data in response.json()
-
-
-
+    response = client.delete('/task/{id}', json=data)
+    assert response.status_code == 200
+    assert data in response.json() == data

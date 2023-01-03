@@ -1,11 +1,11 @@
-from fastapi import FastAPI,HTTPException
+from typing import List
+from fastapi import FastAPI, HTTPException,status
 import schemas
 import models
 from sqlalchemy.orm import Session
 from database import SessionLocal, engine
 from fastapi.params import Depends
 models.Base.metadata.create_all(engine)
-
 
 app = FastAPI()
 
@@ -23,7 +23,7 @@ def index():
     return {"Welcome to ToDo application"}
 
 
-@app.get("/tasks_list")
+@app.get("/tasks_list",status_code=status.HTTP_200_OK)
 def tasks_list(db: Session = Depends(get_db)):
     """ Function to display all tasks present in db"""
     all_tasks = db.query(models.Tasks).all()
@@ -32,7 +32,7 @@ def tasks_list(db: Session = Depends(get_db)):
     return {"No tasks are assigned"}
 
 
-@app.get('/task/{id}')
+@app.get('/task/{id}',status_code=status.HTTP_200_OK)
 def get_task(id, db: Session = Depends(get_db)):
     """ Function to get details of each individual task """
     task = db.query(models.Tasks).filter(models.Tasks.task_id == id).first()
@@ -41,7 +41,7 @@ def get_task(id, db: Session = Depends(get_db)):
     raise HTTPException(status_code=404, detail="Task Not Found ")
 
 
-@app.post("/addtask")
+@app.post("/addtask",status_code=status.HTTP_201_CREATED)
 def add_task(request: schemas.Tasks, db: Session = Depends(get_db)):
     """ Function to create or add new task"""
     new_task = models.Tasks(task_name=request.task_name,
@@ -52,7 +52,7 @@ def add_task(request: schemas.Tasks, db: Session = Depends(get_db)):
     return new_task
 
 
-@app.put('/update/{id}')
+@app.put('/update/{id}',status_code=status.HTTP_200_OK)
 def update_task(id, request: schemas.Tasks, db: Session = Depends(get_db)):
     """ Function to update the task"""
     task = db.query(models.Tasks).filter(models.Tasks.task_id == id)
